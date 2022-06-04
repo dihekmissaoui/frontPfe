@@ -1,0 +1,122 @@
+<button id="modal-error-selected-dates" type="button" hidden class="btn btn-primary" (click)="openModal(template)">{{'modal.open-modal' |
+  translate}}</button>
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Période erronée</h4>
+  </div>
+  <div class="modal-body">
+    <p class="">
+      
+      Vous avez selectionné une intervalle qui contient des dates déja reservés
+    </p>
+    <ul *ngFor="let item of this.datesDisabled">
+      <li>
+        <p>
+          {{ item |date }}
+        </p>
+      </li>
+    </ul>
+
+    <button type="button" class="btn btn-primary mt-4 text-center" (click)="closeModal()">Ok</button>
+  </div>
+</ng-template>
+
+
+<div class="row">
+  <div class="col-12">
+    <div>
+      <h1>Détails Chalet</h1>
+      <app-breadcrumb></app-breadcrumb>
+      <div class="separator mb-5"></div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12 col-md-12 col-xl-8 offset-xl-2 col-left">
+    <div class="card mb-4">
+      <div class="card-body">
+        <div *ngIf="galleryImages && galleryImages.length > 0; else noImage">
+          <ngx-gallery [options]="galleryOptions" [images]="galleryImages"></ngx-gallery>
+        </div>
+        <ng-template #noImage>
+          <div class="d-flex justify-content-center">
+            <img src="/assets/img/no_image-nobg.png" alt="" srcset="" />
+          </div>
+        </ng-template>
+      </div>
+    </div>
+
+    <!-- <app-product-detail-tabs></app-product-detail-tabs> -->
+    <div class="card">
+      <tabset class="card-tabs">
+        <tab heading="{{ 'pages.details-title' | translate }}" class="card-body">
+          <div class="row">
+            <div class="col-12 text-right">
+              <br>
+              <button [disabled]="bsInlineRangeValue && bsInlineRangeValue?.length===0" (click)="reserver()"
+                type="button" class="btn btn-primary btn-lg mb-1 float-right">
+                Reserver
+              </button>
+            </div>
+          </div>
+
+          <p class="font-weight-bold">Description</p>
+          <p>
+            {{ chalet?.description }}
+            <br />
+            <br />
+          </p>
+          <br />
+          <p class="font-weight-bold">Prix Par Nuité</p>
+          <p>
+            {{ chalet?.prix }}
+            <br />
+            <br />
+          </p>
+          <br />
+
+          <p class="font-weight-bold">Adresse</p>
+          <p>
+            {{
+            chalet?.adresse +
+            ", " +
+            chalet?.codeZip +
+            ", " +
+            chalet?.ville +
+            ", " +
+            chalet?.etat
+            }}
+            <br />
+            <br />
+          </p>
+          <br />
+
+          <p class="font-weight-bold">Sélectionnez la date d'arrivée</p>
+          <div class="col-12 mb-4 mt-5">
+            <div class="text-center" *ngIf="!isLoading">
+              <bs-daterangepicker-inline  [bsValue]="bsInlineRangeValue"
+                [datesDisabled]="datesDisabled" [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD-MM-YYYY' }"
+                [minDate]="minDate" (bsValueChange)="onValueChange($event)">
+              </bs-daterangepicker-inline>
+            </div>
+            <div class="text-center">
+              <div class="spinner-border text-primary" role="status" *ngIf="isLoading">
+              </div>
+            </div>
+
+          </div>
+          <br />
+        </tab>
+      </tabset>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-12 col-xl-4 col-right">
+    <!-- commentaires -->
+    <!-- <app-product-detail-info></app-product-detail-info> -->
+
+    <!-- plus de photos -->
+    <!-- <app-profile-photos></app-profile-photos> -->
+  </div>
+</div>
