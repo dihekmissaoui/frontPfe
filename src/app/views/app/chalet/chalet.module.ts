@@ -20,6 +20,7 @@ import { ListChaletComponent } from './list-chalet/list-chalet.component';
 import { AddChaletModalComponent } from './add-chalet-modal/add-chalet-modal.component';
 
 import { DropzoneModule } from 'ngx-dropzone-wrapper';
+import { MyFilterPipe } from './list-chalet/MyFilterPipe';
 
 
 
@@ -30,6 +31,7 @@ import { DropzoneModule } from 'ngx-dropzone-wrapper';
     ListChaletComponent,
     DetailChaletComponent,
     AddChaletModalComponent,
+    MyFilterPipe,
   ],
   imports: [
     SharedModule,

@@ -11,10 +11,9 @@
 
 <div class="d-flex justify-content-center">
   <div class="search-sm d-inline-block float-md-left mr-1 mb-1 align-top mb-3">
-    <input class="form-control" placeholder="Search" [(ngModel)]="searchText">
+    <input type="text" class="form-control" placeholder="Search" [(ngModel)]="searchText">
   </div>
 </div>
-
 <context-menu #basicMenu *ngIf="isConnectedUserAdmin">
   <ng-template contextMenuItem let-item (execute)="onContextMenuClick('modifier',$event.item)">
     <i class="simple-icon-docs mr-1"></i> <span>Modifier</span>
@@ -30,7 +29,7 @@
     <div class="row">
       <div class="col-12 list" *ngIf="displayMode==='list'">
         <div [ngClass]="{'card d-flex flex-row mb-3': true, 'active':isSelected(p)}"
-          *ngFor="let p of data | chaletFilter:searchText ; let i=index" [contextMenu]="basicMenu"
+          *ngFor="let p of data | myfilter:searchText ; let i=index" [contextMenu]="basicMenu"
           [contextMenuSubject]="p">
           <div class="d-flex flex-grow-1 min-width-zero" (click)="goToDetail(p.id)">
             <div
@@ -57,7 +56,7 @@
       </div>
 
       <div class="col-12 list" *ngIf="displayMode==='thumb'">
-        <div [ngClass]="{'card d-flex flex-row mb-3': true, 'active':isSelected(p)}" *ngFor="let p of data; let i=index"
+        <div [ngClass]="{'card d-flex flex-row mb-3': true, 'active':isSelected(p)}" *ngFor="let p of data | myfilter:searchText; let i=index"
           [contextMenu]="basicMenu" [contextMenuSubject]="p">
           <a class="d-flex" href="javascript:;">
             <img [src]="'data:image/png;base64,'+ p.images[0]?.data" [alt]="p.nom"
@@ -79,7 +78,7 @@
 
       <div class="col-12 list" *ngIf="displayMode==='image'">
         <div class="row">
-          <div class="col-xl-3 col-lg-4 col-12 col-sm-6 mb-4" *ngFor="let p of data; let i=index"
+          <div class="col-xl-3 col-lg-4 col-12 col-sm-6 mb-4" *ngFor="let p of data | myfilter:searchText; let i=index"
             [contextMenu]="basicMenu" [contextMenuSubject]="p">
             <div [ngClass]="{'card': true, 'active':isSelected(p)}" (click)="goToDetail(p.id)">
               <div class="position-relative" *ngIf=" p.images.length">

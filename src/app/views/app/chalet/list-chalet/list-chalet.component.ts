@@ -28,7 +28,7 @@ export class ListChaletComponent implements OnInit {
   endOfTheList = false;
   totalItem = 0;
   totalPage = 0;
-  searchText ="";
+  searchText: string;
 
   @ViewChild("basicMenu") public basicMenu: ContextMenuComponent;
   @ViewChild("addNewModalRef", { static: true }) addNewModalRef: AddChaletModalComponent;
@@ -42,6 +42,7 @@ export class ListChaletComponent implements OnInit {
     private router: Router,
     private authService: AuthService
   ) {
+    this.searchText='';
   }
 
   ngOnInit() {
