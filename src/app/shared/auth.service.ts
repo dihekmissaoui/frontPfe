@@ -1,7 +1,10 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { auth } from 'firebase/app';
+import { auth, User } from 'firebase/app';
 import { Observable, from } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { IUser } from '../model/user.model';
 
 export interface ISignInCredentials {
   email: string;
@@ -11,7 +14,8 @@ export interface ISignInCredentials {
 export interface ICreateCredentials {
   email: string;
   password: string;
-  displayName: string;
+  displayName?: string;
+  role?: string[];
 }
 
 export interface IPasswordReset {
@@ -21,14 +25,22 @@ export interface IPasswordReset {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    'Accept': '*/*'
+  });
+  options = { headers: this.headers };
 
-  constructor(private afAuth: AngularFireAuth) { }
+  constructor(private afAuth: AngularFireAuth, private httpClient: HttpClient) { }
 
-  signIn(credentials: ISignInCredentials): Observable<auth.UserCredential> {
-    return from(this.afAuth.auth.signInWithEmailAndPassword(credentials.email, credentials.password));
+  signIn(credentials: ISignInCredentials): Observable<any> {
+    // Firebase cnx
+    // return from(this.afAuth.auth.signInWithEmailAndPassword(credentials.email, credentials.password));
+    return this.httpClient.post(`${environment.serverUrl}/api/auth/signin`, credentials, this.options);
   }
 
   signOut() {
+    localStorage.removeItem('connected_user');
     return from(this.afAuth.auth.signOut());
   }
 
@@ -43,6 +55,11 @@ export class AuthService {
     );
   }
 
+  registerAdmin(credentials: ICreateCredentials):Observable<any> {
+    credentials.role = ['admin'];
+    return this.httpClient.post(`${environment.serverUrl}/api/auth/signup`, credentials, this.options);
+  }
+
   sendPasswordEmail(email) {
     return from(this.afAuth.auth.sendPasswordResetEmail(email));
   }
@@ -53,6 +70,11 @@ export class AuthService {
 
   get user(): firebase.User {
     return this.afAuth.auth.currentUser;
+  }
+
+  get connectedUser(): IUser {
+      const user: IUser =JSON.parse(localStorage.getItem('connected_user'));
+      return user;
   }
 
 }

@@ -5,6 +5,7 @@ export interface IMenuItem {
   to: string;
   newWindow?: boolean;
   subs?: IMenuItem[];
+  isAdminFeature?: boolean;
 }
 
 const data: IMenuItem[] = [
@@ -58,12 +59,14 @@ const data: IMenuItem[] = [
     icon:'iconsminds-notepad',
     label:'menu.reservation',
     to:'/app/reservation',
+    isAdminFeature: true,
   },
   {
     id:'calendar',
     icon:'iconsminds-calendar-4',
     label:'menu.calendar',
     to:'/app/calendar',
+    isAdminFeature: true,
   }
 ];
 export default data;

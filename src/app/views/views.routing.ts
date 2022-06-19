@@ -9,12 +9,17 @@ const redirectUnauthorizedToLogin = () =>  redirectUnauthorizedTo(['/user']) ;
 const redirectLoggedInToItems = () => redirectLoggedInTo(['/app']);
 
 let routes: Routes = [
+  // {
+  //   path: '',
+  //   component: ViewsComponent,
+  //   pathMatch: 'full',
+  // },
   {
     path: '',
-    component: ViewsComponent,
-    pathMatch: 'full',
+    redirectTo: 'app/chalets', pathMatch: 'full',
   },
-  { path: 'app', loadChildren: () => import('./app/app.module').then(m => m.AppModule), canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin } },
+  // { path: 'app', loadChildren: () => import('./app/app.module').then(m => m.AppModule), canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin } },
+  { path: 'app', loadChildren: () => import('./app/app.module').then(m => m.AppModule)},
   { path: 'user', loadChildren: () => import('./user/user.module').then(m => m.UserModule), data: { authGuardPipe: redirectLoggedInToItems } },
   { path: 'error', component: ErrorComponent },
   { path: '**', redirectTo: '/error' }

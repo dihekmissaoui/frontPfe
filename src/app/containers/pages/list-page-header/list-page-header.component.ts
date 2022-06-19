@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, EventEmitter, Output, Input } from '@angular/core';
+import { IUser } from 'src/app/model/user.model';
 
 @Component({
   selector: 'app-list-page-header',
@@ -17,6 +18,7 @@ export class ListPageHeaderComponent implements OnInit {
   @Input() itemOptionsPerPage = [5, 10, 20];
   @Input() itemOrder = { label: 'Product Name', value: 'title' };
   @Input()  itemOptionsOrders = [{ label: 'Product Name', value: 'title' }, { label: 'Category', value: 'category' }, { label: 'Status', value: 'status' }];
+  @Input() isConnectedUserAdmin: boolean = false;
 
   @Output() changeDisplayMode: EventEmitter<string> = new EventEmitter<string>();
   @Output() addNewItem: EventEmitter<any> = new EventEmitter();

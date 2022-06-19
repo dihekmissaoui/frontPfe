@@ -5,4 +5,7 @@ export interface IUser {
     email?: string,
     password?: string,
     username?: string,
+    accessToken?: string,
+    roles?: string[],
+    tokenType?: string,
 }

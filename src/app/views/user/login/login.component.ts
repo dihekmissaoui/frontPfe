@@ -29,6 +29,7 @@ export class LoginComponent implements OnInit {
     this.buttonState = 'show-spinner';
 
     this.authService.signIn(this.loginForm.value).subscribe((user) => {
+      localStorage.setItem('connected_user',JSON.stringify(user));
       this.router.navigate(['/']);
     }, (error) => {
       this.buttonDisabled = false;

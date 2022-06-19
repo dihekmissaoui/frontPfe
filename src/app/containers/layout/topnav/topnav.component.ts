@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { LangService, Language } from 'src/app/shared/lang.service';
 import { AuthService } from 'src/app/shared/auth.service';
 import { environment } from 'src/environments/environment';
+import { User } from 'firebase';
+import { IUser } from 'src/app/model/user.model';
 
 @Component({
   selector: 'app-topnav',
@@ -20,6 +22,10 @@ export class TopnavComponent implements OnInit, OnDestroy {
   isFullScreen = false;
   isDarkModeActive = false;
   searchKey = '';
+  currentUser: IUser;
+  isAuthenticated: boolean = false;
+  hasRoleAdmin: boolean = false;
+  hasRoleUser: boolean = false;
 
   constructor(private sidebarService: SidebarService, private authService: AuthService, private router: Router, private langService: LangService) {
     this.languages = this.langService.supportedLanguages;
@@ -65,6 +71,14 @@ export class TopnavComponent implements OnInit, OnDestroy {
     if (this.authService.user) {
       this.displayName = this.authService.user.displayName;
     }
+    if(this.authService.connectedUser){
+      this.currentUser = this.authService.connectedUser;
+      this.isAuthenticated = true;
+      this.hasRoleAdmin = this.currentUser.roles.includes("ROLE_ADMIN");
+      this.hasRoleUser = this.currentUser.roles.includes("ROLE_USER");
+    }
+
+
     this.subscription = this.sidebarService.getSidebar().subscribe(
       res => {
         this.sidebar = res;
@@ -103,6 +117,7 @@ export class TopnavComponent implements OnInit, OnDestroy {
   onSignOut() {
     this.authService.signOut().subscribe(() => {
       this.router.navigate(['/']);
+      window.location.reload()
     });
   }
 
@@ -156,5 +171,8 @@ export class TopnavComponent implements OnInit, OnDestroy {
     const input = document.querySelector('.mobile-view');
     if (input && input.classList) { input.classList.remove('mobile-view'); }
     this.searchKey = '';
+  }
+  goToLogin(): void {
+    this.router.navigate(['/user/login']);
   }
 }

@@ -4,6 +4,8 @@ import { filter, map } from 'rxjs/operators';
 import { SidebarService, ISidebar } from './sidebar.service';
 import menuItems, { IMenuItem } from 'src/app/constants/menu';
 import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/shared/auth.service';
+import { IUser } from 'src/app/model/user.model';
 
 @Component({
   selector: 'app-sidebar',
@@ -17,8 +19,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   sidebar: ISidebar;
   subscription: Subscription;
-
-  constructor(private router: Router, private sidebarService: SidebarService, private activatedRoute: ActivatedRoute) {
+  connectedUser:IUser;
+  isConnectedUserAdmin:boolean = false;
+  constructor(private router: Router, private sidebarService: SidebarService, private activatedRoute: ActivatedRoute, private authService: AuthService) {
     this.subscription = this.sidebarService.getSidebar().subscribe(
       res => {
         this.sidebar = res;
@@ -66,6 +69,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
       const nextClasses = this.getMenuClassesForResize(containerClassnames);
       this.sidebarService.setContainerClassnames(0, nextClasses.join(' '), this.sidebar.selectedMenuHasSubItems);
       this.isCurrentMenuHasSubItem();
+        if(this.authService.connectedUser){
+          this.isConnectedUserAdmin = this.authService.connectedUser.roles.includes("ROLE_ADMIN");
+        }
     }, 100);
   }
 

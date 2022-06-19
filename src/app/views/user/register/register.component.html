@@ -14,11 +14,11 @@
     <h6 class="mb-4">Register</h6>
 
     <form #registerForm="ngForm" novalidate  (ngSubmit)="onSubmit()">
-      <label class="form-group has-float-label">
+      <!-- <label class="form-group has-float-label">
         <input class="form-control" required ngModel #displayName="ngModel" name="displayName"/>
         <span>{{ 'user.fullname' | translate }}</span>
         <div *ngIf="!displayName.valid && registerForm.submitted" class="invalid-tooltip">Name is required!</div>
-      </label>
+      </label> -->
       <label class="form-group has-float-label">
         <input class="form-control" required email ngModel #email="ngModel" name="email"/>
         <span>{{ 'user.email' | translate }}</span>

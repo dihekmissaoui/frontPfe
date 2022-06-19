@@ -25,7 +25,8 @@ export class RegisterComponent implements OnInit {
     this.buttonDisabled = true;
     this.buttonState = 'show-spinner';
 
-    this.authService.register(this.registerForm.value).subscribe(() => {
+    this.authService.registerAdmin(this.registerForm.value).subscribe((res) => {
+      localStorage.setItem('connected_user',JSON.stringify(res));
       this.router.navigate(['/']);
     }, (error) => {
       this.notifications.create('Error', error.message, NotificationType.Bare, { theClass: 'outline primary', timeOut: 6000, showProgressBar: false });

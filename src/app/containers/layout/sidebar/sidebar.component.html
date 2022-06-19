@@ -4,14 +4,28 @@
             <ul class="list-unstyled">
                 <li *ngFor="let item of menuItems"
                     [ngClass]="{'active': (selectedParentMenu === item.id && viewingParentMenu === '') || viewingParentMenu === item.id}">
-                    <a *ngIf="item.newWindow" [href]="item.to" rel="noopener noreferrer" target="_blank">
+                    <!-- <a *ngIf="item.newWindow" [href]="item.to" rel="noopener noreferrer" target="_blank">
                         <i [ngClass]="item.icon"></i>{{item.label | translate}}</a>
                     <a *ngIf="!item.newWindow && item.subs &&  item.subs.length>0"
                         (click)="openSubMenu($event,item); false" [href]="item.to">
-                        <i [ngClass]="item.icon"></i> {{item.label | translate}}</a>
-                    <a *ngIf="!item.newWindow && (!item.subs || (item.subs &&  item.subs.length===0))"
-                        (click)="changeSelectedParentHasNoSubmenu(item.id); false" [routerLink]="item.to">
-                        <i [ngClass]="item.icon"></i> {{item.label | translate}}</a>
+                        <i [ngClass]="item.icon"></i> {{item.label | translate}}</a> -->
+                    <div *ngIf="item.label == 'menu.reservation' || item.label == 'menu.calendar'; else show">
+                        <div *ngIf="isConnectedUserAdmin">
+                            <a *ngIf="!item.newWindow && (!item.subs || (item.subs &&  item.subs.length===0))"
+                            (click)="changeSelectedParentHasNoSubmenu(item.id); false" [routerLink]="item.to">
+                            <i [ngClass]="item.icon"></i>
+                            {{item.label | translate}}
+                        </a>
+                        </div>
+                    </div>
+                    <ng-template #show>
+                        <a *ngIf="!item.newWindow && (!item.subs || (item.subs &&  item.subs.length===0))"
+                            (click)="changeSelectedParentHasNoSubmenu(item.id); false" [routerLink]="item.to">
+                            <i [ngClass]="item.icon"></i>
+                            {{item.label | translate}}
+                        </a>
+                    </ng-template>
+                    
 
 
                 </li>

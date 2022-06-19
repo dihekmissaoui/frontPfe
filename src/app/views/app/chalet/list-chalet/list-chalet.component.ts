@@ -7,6 +7,7 @@ import { IChalet } from "src/app/model/chalet.model";
 import noImgData from 'src/app/constants/no-image-bsase64';
 import { AddChaletModalComponent } from "../add-chalet-modal/add-chalet-modal.component";
 import { SharedObjectService } from "src/app/shared/shared-object.service";
+import { AuthService } from "src/app/shared/auth.service";
 
 @Component({
   selector: "app-list-chalet",
@@ -27,20 +28,27 @@ export class ListChaletComponent implements OnInit {
   endOfTheList = false;
   totalItem = 0;
   totalPage = 0;
+  searchText ="";
 
   @ViewChild("basicMenu") public basicMenu: ContextMenuComponent;
   @ViewChild("addNewModalRef", { static: true }) addNewModalRef: AddChaletModalComponent;
   @ViewChild("updateModalRef", { static: true }) updateModalRef: AddChaletModalComponent;
 
+  isConnectedUserAdmin: boolean = false;
+
   constructor(
     private sharedObjectService: SharedObjectService,
     private chaletService: ChaletService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
   }
 
   ngOnInit() {
-      this.loadData(this.itemsPerPage, this.currentPage, this.search, this.orderBy);
+    this.loadData(this.itemsPerPage, this.currentPage, this.search, this.orderBy);
+    if (this.authService.connectedUser) {
+      this.isConnectedUserAdmin = this.authService.connectedUser.roles.includes("ROLE_ADMIN");
+    }
   }
 
   loadData(
@@ -170,5 +178,13 @@ export class ListChaletComponent implements OnInit {
       this.search,
       this.orderBy
     );
+  }
+  onSearchKeyUp($event) {
+    const baseData = this.data;
+    if ($event = "") {
+      this.data = baseData;
+    } else {
+      this.data = this.data.filter(x => x.adresse.includes($event));
+    }
   }
 }
